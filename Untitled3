@@ -1,0 +1,59 @@
+'''
+编写程序模拟抓地鼠的小游戏。假设一个有一排5个洞口，小地鼠最开始的时候在其中一个洞口，
+然后人随机打开一个洞口，如果里面有小地鼠就抓到了。如果洞口里面没有小地鼠就明天再来抓，
+但是第二天小狐狸就会在有人来抓之前跳到隔壁洞口里。
+
+'''
+from random import choice,randrange
+def catchMe(n=5,maxStep=10):
+    position = [0]*n
+    oldPos = randrange(0,n)
+    position[oldPos] = 1
+    #print(oldPos)
+    while maxStep>=0:
+        maxStep -=1
+        while True:
+            try:
+                x = input('打开几号洞(0-{0}):'.format(n-1))
+                x = int(x)
+                assert 0<=x<n, '重新输入洞号'
+                break
+            except:
+                print("wrong input type")
+        if position[x] == 1:
+            print("catch sucess!")
+            break
+        else:
+            print("faliure!")
+        if oldPos == n-1:
+            newPos = oldPos-1
+        elif oldPos == 0:
+            newPos = oldPos +1
+        else:
+            newPos = oldPos +choice((1,-1))
+        position[oldPos],position[newPos] = 0,1
+        oldPos = newPos
+    else:
+        print("放弃吧")
+catchMe()
+
+
+
+'''
+模拟报数游戏。有n个人围城一圈，顺序编号，从第一个人开始从1到k（假设k=3）报数，
+报到k的人退出圈子，然后圈子缩小，从下一个人继续游戏报数，问最后留下的是原来的几号？
+'''
+from itertools import cycle
+def demo(lst,k):
+    t_lst = lst[:]
+    
+    while len(t_lst)>1:
+        c = cycle(t_lst)
+        for i in range(k):
+            t = next(c)
+        index = t_lst.index(t)
+        t_lst = t_lst[index+1:]+t_lst[:index]
+        
+    return t_lst[0]
+lst = list(range(1,11))
+print(demo(lst,3))
